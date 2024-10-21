@@ -1,7 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react'
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { api } from './src/services/Api'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
+import api from './src/services/api'
+import apiclima from './src/services/apiClima'
+// import { response } from 'express'
 
 export default function App() {
 
@@ -10,6 +12,53 @@ export default function App() {
   const [bairro, setBairro] = useState("")
   const [localidade, setLocalidade] = useState("")
   const [uf, setUf] = useState("")
+
+  //essas duas constantes são para api clima
+  const [main, setMain] = useState("")
+  const [description, setDescription] = useState("")
+
+  async function buscarCep() {
+    const numeroMaximo = 8
+
+    if (cep == "") {
+      Alert.alert("CEP inválido")
+      setCep("")
+    }
+    else if (cep.length != numeroMaximo) {
+      Alert.alert("CEP inválido")
+      setCep("")
+    }
+
+    try {
+      const response = await api.get(`/${cep}/json/`)
+      setLogradouro(response.data.logradouro)
+      setBairro(response.data.bairro)
+      setLocalidade(response.data.localidade)
+      setUf(response.data.uf)
+
+
+      buscaClima(response.data.localidade)
+
+
+
+    } catch (error) {
+      console.log("Erro" + error)
+    }
+  }
+
+  // função buscaClima
+  async function buscaClima(localidade) {
+    const keyApi = "906cb819251f49183121fa17dd007055"
+
+    try {
+      const response = await apiclima.get(`/weather?q=${localidade}&units=metric&appid=${keyApi}&lang=pt_br`)
+      setMain(response.data.main)
+      setDescription(response.data.weather[0].description)
+
+    } catch (error) {
+      console.log("Erro" + error)
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -22,10 +71,11 @@ export default function App() {
         <TextInput
           style={{
             borderColor: "#000000", borderWidth: 2, width: 200, fontSize: 18, marginTop: 30, marginEnd: 20,
-            borderRadius: 10, padding:15}}
+            borderRadius: 10, padding: 15
+          }}
           value={cep} onChangeText={(texto) => setCep(texto)} placeholder="Cep">
         </TextInput>
-        <TouchableOpacity style={styles.botaoBuscar}>
+        <TouchableOpacity style={styles.botaoBuscar} onPress={buscarCep}>
           <Text style={styles.textoBotaoBuscar}>Buscar</Text>
         </TouchableOpacity>
       </View>
@@ -48,9 +98,18 @@ export default function App() {
       <TextInput
         style={{
           borderColor: "#000000", borderWidth: 2, width: 100, fontSize: 18, marginTop: 10, marginEnd: 20, borderRadius: 10,
-          marginHorizontal: 20, padding: 15}}
+          marginHorizontal: 20, padding: 15
+        }}
         value={uf} onChangeText={(texto) => setUf(texto)} placeholder="Estado">
       </TextInput>
+
+      {/* espaço para o clima */}
+      <View style={styles.weatherContainer}>
+        <Text style={styles.weatherTitle}>Clima Atual em:</Text>
+        <Text style={styles.weatherTitle}>{localidade} - {uf}</Text>
+        <Text style={styles.weatherText}>Temperatura:°C {main.temp}</Text>
+        <Text style={styles.weatherText}>Condição: {description}</Text>
+      </View>
 
     </View>
   );
@@ -107,5 +166,31 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     marginHorizontal: 20
+  },
+
+  // espaço para o clima
+
+  weatherContainer: {
+    marginTop: 40,
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    padding: 30,
+    borderRadius: 20,
+  },
+
+  weatherTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+
+  weatherIcon: {
+    width: 50,
+    height: 50,
+    marginBottom: 10,
+  },
+
+  weatherText: {
+    fontSize: 16,
   }
 });
