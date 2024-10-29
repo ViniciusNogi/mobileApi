@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
-import api from './src/services/api'
-import apiclima from './src/services/apiClima'
+import apiCep from './src/services/apiCep'
+import apiClima from './src/services/apiClima'
 // import { response } from 'express'
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
     }
 
     try {
-      const response = await api.get(`/${cep}/json/`)
+      const response = await apiCep.get(`/${cep}/json/`)
       setLogradouro(response.data.logradouro)
       setBairro(response.data.bairro)
       setLocalidade(response.data.localidade)
@@ -51,7 +51,7 @@ export default function App() {
     const keyApi = "906cb819251f49183121fa17dd007055"
 
     try {
-      const response = await apiclima.get(`/weather?q=${localidade}&units=metric&appid=${keyApi}&lang=pt_br`)
+      const response = await apiClima.get(`/weather?q=${localidade}&units=metric&appid=${keyApi}&lang=pt_br`)
       setMain(response.data.main)
       setDescription(response.data.weather[0].description)
 
@@ -107,8 +107,8 @@ export default function App() {
       <View style={styles.weatherContainer}>
         <Text style={styles.weatherTitle}>Clima Atual em:</Text>
         <Text style={styles.weatherTitle}>{localidade} - {uf}</Text>
-        <Text style={styles.weatherText}>Temperatura:°C {main.temp}</Text>
-        <Text style={styles.weatherText}>Condição: {description}</Text>
+        <Text style={styles.weatherTitle}>Temperatura: {main.temp}°C</Text>
+        <Text style={styles.weatherTitle}>Condição: {description}</Text>
       </View>
 
     </View>
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   },
 
   textoBotaoBuscar: {
-    color: "FFFFFF",
+    color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center"
