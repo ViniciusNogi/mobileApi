@@ -6,3 +6,5 @@ const apiClima = axios.create({
 })
 
 export default apiClima
+
+
