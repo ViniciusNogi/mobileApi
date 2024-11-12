@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Alert, View, Text } from 'react-native';
 import BotaoBuscar from '../../components/BotaoBuscar/botaoBuscar'; // Botão de buscar
-import { Container, TopBar, Title,TitleCep, InputContainer, Input } from './Home.Styles'; // Estilos
+import { Container, TopBar, Title,TitleCep, InputContainer, Input, InfoText, InfoContainer } from './Home.Styles'; // Estilos
 import apiCep from '../../services/apiCep';
 import apiClima from '../../services/apiClima';
 import Layout from '../../components/layout';
@@ -82,20 +82,35 @@ export default function Home() {
 
       {/* Exibição dos dados de endereço e clima */}
       {logradouro && (
-        <View>
-          <Text>Logradouro: {logradouro}</Text>
-          <Text>Bairro: {bairro}</Text>
-          <Text>Cidade: {localidade}</Text>
-          <Text>Estado: {uf}</Text>
-        </View>
-      )}
+  <InfoContainer>
+    <InfoText>{`Logradouro: ${logradouro}`}</InfoText>
+  </InfoContainer>
+)}
 
-      {main && (
-        <View>
-          <Text>Temperatura: {main.temp}°C</Text>
-          <Text>Condição: {description}</Text>
-        </View>
-      )}
+{bairro && (
+  <InfoContainer>
+    <InfoText>{`Bairro: ${bairro}`}</InfoText>
+  </InfoContainer>
+)}
+
+{localidade && (
+  <InfoContainer>
+    <InfoText>{`Cidade: ${localidade}`}</InfoText>
+  </InfoContainer>
+)}
+
+{uf && (
+  <InfoContainer>
+    <InfoText>{`Estado: ${uf}`}</InfoText>
+  </InfoContainer>
+)}
+
+{main && description && (
+  <InfoContainer>
+    <InfoText>{`Temperatura: ${main.temp}°C`}</InfoText>
+    <InfoText>{`Condição: ${description}`}</InfoText>
+  </InfoContainer>
+)}
     </Container>
   </Layout>
   );

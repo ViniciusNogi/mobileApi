@@ -7,8 +7,8 @@ import { colors } from '../../styles/colors';
 // Container principal da tela
 export const Container = styled.View`
   flex: 1;
-  justify-content: center;
-  align-itenms: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   padding: 20px;
   width:100%;
 `;
@@ -20,8 +20,8 @@ export const TopBar = styled.View`
   align-items: center;
   margin-bottom: 20px;
   background-color: transparent;
-  margin-top: 30px;
-  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
   width:100%;
 `;
 
@@ -47,7 +47,6 @@ export const InputContainer = styled.View`
   justify-content: center;
   margin-bottom: 20px;
   position: relative;
-  z-index: 1;
   width: 100%;
 `;
 
@@ -65,6 +64,24 @@ export const Input = styled.TextInput`
   shadow-color: ${colors.mainColor};
 `;
 
+export const InfoText = styled.Text`
+  border-width: 2px;
+  border-color: ${colors.mainColor}; 
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 15px;
+  width: 220px;
+  margin-right: 10px;
+  color: ${colors.textColor};
+  background-color: transparent; 
+  margin-bottom: 10px; 
+  shadow-color: ${colors.mainColor};
+  text-align: center; /* Para centralizar o texto */
+`;
 
-
+export const InfoContainer = styled.View`
+  margin-bottom: 10px;
+  width: 100%; 
+  align-items: center;
+`;
 
